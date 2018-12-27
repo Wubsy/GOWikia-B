@@ -2,7 +2,7 @@ package main
 
 import(
 	"fmt"
-	"../src/GOWikia_Wubsy"
+	"../GOWikia_Wubsy"
 	"strconv"
 )
 

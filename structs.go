@@ -2,11 +2,9 @@ package GOWikia_Wubsy
 
 import (
 	"encoding/json"
-	"bytes"
 	"github.com/valyala/fasthttp"
 	"time"
 	"errors"
-	"fmt"
 	"net/http"
 	"io/ioutil"
 	"strconv"
@@ -25,7 +23,7 @@ type ContentResult struct {
 type Section struct {
 	Title string `json:"title"`
 	Level int `json:"level"`
-	Content []SectionContent `json:"SectionContent"`
+	Content []SectionContent `json:"content"`
 	Images []SectionImages `json:"images"`
 }
 
@@ -146,7 +144,7 @@ func (w *WikiaApi) SearchList(params QueryParams) (*SearchResult, error) {
 	return searchResult, json.Unmarshal(urn, &searchResult)
 }
 
-func (w *WikiaApi) GetArticleInfoByID(params GetAsSimpleJsonParams) (*ContentResult, error) {
+func (w *WikiaApi) GetArticleSimpleInfoByID(params GetAsSimpleJsonParams) (*ContentResult, error) {
 	if params.IDs == 0{
 		return nil, errors.New("ID is required")
 	}
@@ -160,19 +158,24 @@ func (w *WikiaApi) GetArticleInfoByID(params GetAsSimpleJsonParams) (*ContentRes
 
 	return contentResult, json.Unmarshal(urn, &contentResult)
 }
-
-//Credit to github.com/Time6628
-func GetJson(url string, target interface{}) error {
-	fmt.Println(url)
-	stat, body, err := client.Get(nil, url)
-	if err != nil || stat != 200 {
-		return errors.New("Could not obtain json response")
+/*
+func (w *WikiaApi) GetArticleImageByID(params GetAsSimpleJsonParams) (string) {
+	if params.IDs == 0{
+		return nil, errors.New("ID is required")
 	}
-	return json.NewDecoder(bytes.NewReader(body)).Decode(target)
 
 
+
+	urn, err := fetchUrl(w.url + "api/v1/Articles/AsSimpleJson?id=" + strconv.Itoa(params.IDs))
+
+	var contentResult *ContentResult
+	if err != nil {
+		return nil, err
+	}
+
+	return
 }
-
+*/
 func fetchUrl(u string) ([]byte, error) {
 	response, err := http.Get(u)
 	if err != nil {
